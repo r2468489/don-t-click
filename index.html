@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Valentine's Surprise</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --bg: #fff0f3;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            position: fixed;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            min-height: 450px;
+            /* Added min-height to give button room to move */
+            padding: 30px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            z-index: 10;
+            position: relative;
+            /* Necessary for absolute positioning of the No button */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+            width: 100%;
+        }
+
+        .active {
+            display: block;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+            min-height: 80px;
+            width: 100%;
+        }
+
+        .yes-btn,
+        .next-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+            z-index: 1001;
+        }
+
+        #no-btn {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            transition: left 0.3s ease, top 0.3s ease;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        img {
+            max-width: 180px;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .heart {
+            position: absolute;
+            color: var(--primary);
+            pointer-events: none;
+            animation: fall linear forwards;
+            z-index: 5;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="page1" class="page active">
+            <h1>Will you be my Valentine?</h1>
+            <img
+                src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHFicm94bm9oZndreGZ4M3ZiaWthNmR5am9ueG9oZWp5bmZleXpwaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/c76IJLufpNwSULPk77/giphy.gif">
+            <div class="btn-container">
+                <button class="yes-btn" onclick="nextPage(2)">YES! 😍</button>
+                <button id="no-btn" onmouseenter="moveNo()" onclick="moveNo()">No 😢</button>
+            </div>
+        </div>
+
+        <div id="page2" class="page">
+            <h1>I Knew You'd Say Yes! ❤️</h1>
+            <p>You're the best!</p>
+            <img src="Cat Love GIF by NGcorpvtc (1).gif">
+            <br>
+            <button class="next-btn" onclick="nextPage(3)">Why else? ✨</button>
+        </div>
+
+        <div id="page3" class="page">
+            <h1>You're Special</h1>
+            <p>Your smile is magic.</p>
+            <img src="
+            In Love Cat GIF.gif">
+            <br>
+            <button class="next-btn" onclick="nextPage(4)">One last thing... 🌹</button>
+        </div>
+
+        <div id="page4" class="page">
+            <h1>My Promise</h1>
+            <p style="font-weight: 500; font-family: Outfit;" >Koi Tumse pyar kiu karega 😂</p>
+            <h2 style="color: var(--primary);">Happy Valentine's Day! ❤️</h2>
+            <img src="Funny Dog Dancing Husky GIF (2).gif">
+        </div>
+    </div>
+
+    <script>
+        function moveNo() {
+            const btn = document.getElementById('no-btn');
+            const container = document.querySelector('.container');
+
+            // Change position to absolute within the container
+            if (btn.style.position !== 'absolute') {
+                btn.style.position = 'absolute';
+            }
+
+            // Get container boundaries
+            const cW = container.clientWidth;
+            const cH = container.clientHeight;
+
+            // Get button dimensions
+            const bW = btn.offsetWidth;
+            const bH = btn.offsetHeight;
+
+            // Calculate safe area (with a small 10px margin)
+            const maxX = cW - bW - 10;
+            const maxY = cH - bH - 10;
+
+            // Random position inside the white box
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+
+        function nextPage(num) {
+            const pages = document.getElementsByClassName('page');
+            for (let i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
+            document.getElementById('page' + num).classList.add('active');
+
+            if (num >= 2) {
+                // Hide No button once Yes is clicked
+                document.getElementById('no-btn').style.display = 'none';
+                if (!window.heartsStarted) {
+                    setInterval(createHeart, 300);
+                    window.heartsStarted = true;
+                }
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '-5vh';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            const duration = Math.random() * 3 + 2;
+            heart.style.animationDuration = duration + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), duration * 1000);
+        }
+    </script>
+</body>
+
+</html>
